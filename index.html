@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Live key detector</title>
+        <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+        <script src="main.js" async></script> 
+    </head>
+    <body>
+        <div class="centerscreen" id="startscr">
+            <h1>Select input:</h1>
+            <div class="inlineflex"> <button onclick="start(true)">MIC</button> <button onclick="start(false)">LOCAL AUDIO</button> </div>
+        </div>
+        <div class="center" style="display: none;" id="corebody">
+            <div id="freq">Waiting...</div>
+            <div id="note"></div>
+            <br> <br> 
+            <div class="flexrow">
+                <canvas width="600" height="300" id="canvas" style="border: 2px solid white;"></canvas>
+                <canvas width="600" height="300" id="canvas_notehistory" style="border: 2px solid white;"></canvas>
+            </div>
+        </div>
+        <br> <br> 
+        <div> <span style="font-size: 4em;" id="camelota">-</span> <span id="camelotb">-</span> </div>
+        <br> <br> 
+        <canvas id="pieChart" width="300" height="300" style="width: 20%;"></canvas>
+        </div> 
+    </body>
+</html>
