@@ -99,10 +99,10 @@ async function start(micOrDisplay) {
     function loop() {
         analyser.getFloatFrequencyData(mag);
 
-        canvas.fillStyle = 'black';
+        canvas.fillStyle = 'white';
         canvas.fillRect(0,0,cw,ch);
 
-        canvas.strokeStyle = 'lime';
+        canvas.strokeStyle = `hsl(${getColorHue(11)}, 70%, 50%)`;
         canvas.beginPath();
 
         const fLimitLower = Math.floor(30 / binWidth); // 30Hz
@@ -193,10 +193,10 @@ async function start(micOrDisplay) {
         noteHistory[noteCursor++] = lastNote;
         if (noteCursor >= noteHistory.length) noteCursor = 0;
 
-	    canvas_history.fillStyle = 'black';
+	    canvas_history.fillStyle = 'white';
         canvas_history.fillRect(0,0,cw,ch);
 
-        canvas_history.strokeStyle = 'lime';
+        canvas_history.strokeStyle = `hsl(${getColorHue(11)}, 70%, 50%)`;
         canvas_history.beginPath();
 
         let score = new Int16Array(camelotsA.length);
