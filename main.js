@@ -16,7 +16,7 @@ function freqToNote(freq) {
 }
 
 function getColorHue(note) {
-    return (12 - ((colors[note] - 6) % 12)) * 30;
+    return ((12 - ((colors[note] - 6) % 12)) * 30) % 360;
 }
 
 function drawPie(data) {
@@ -30,7 +30,7 @@ function drawPie(data) {
         const sliceAngle = (value / total) * 2 * Math.PI;
 
         // Random color for each slice
-        const color = `hsl(${getColorHue(i)}, 70%, 50%)`;
+        const color = `hsl(${getColorHue(i)}, 100%, 65%)`;
         ctx.fillStyle = color;
 
         // Draw slice
@@ -53,7 +53,7 @@ function drawPie(data) {
         const labelY = canvas.height/2 + Math.sin(midAngle) * (canvas.height/2 * zoom);
 
         ctx.fillStyle = '#fff';
-        ctx.font = '14px Rubik';
+        ctx.font = (14*4)+'px Rubik';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         if ((value / total) > 0.05) ctx.fillText(noteNames[i], labelX, labelY);
@@ -68,8 +68,8 @@ async function start(micOrDisplay) {
 
     const canvas = document.getElementById('canvas').getContext('2d');
     canvas.fillStyle = 'black';
-    const cw = 600;
-    const ch = 300;
+    const cw = 1200;
+    const ch = 600;
     canvas.fillRect(0,0,cw,ch);
 
     const canvas_history = document.getElementById('canvas_notehistory').getContext('2d');
@@ -102,7 +102,8 @@ async function start(micOrDisplay) {
         canvas.fillStyle = 'white';
         canvas.fillRect(0,0,cw,ch);
 
-        canvas.strokeStyle = `hsl(${getColorHue(11)}, 70%, 50%)`;
+        canvas.lineWidth = 3;
+        canvas.strokeStyle = `hsl(${getColorHue(11)}, 100%, 65%)`;
         canvas.beginPath();
 
         const fLimitLower = Math.floor(30 / binWidth); // 30Hz
@@ -110,7 +111,7 @@ async function start(micOrDisplay) {
 
         // convert dB to linear magnitude
         for (let i = 0; i < mag.length; i++) {
-            let boost = i / fLimitUpper;
+            let boost = i / (fLimitUpper + 1);
             if (boost > 1) boost = 1;
             boost = 1 - boost;
             /*boost /= 2;
@@ -119,8 +120,16 @@ async function start(micOrDisplay) {
 
             if (i <= fLimitUpper) {
                 let y = ch - ((20*Math.log10(lin[i]))+100)/100 * ch; // normalize
-                if(i===0) canvas.moveTo(i*(cw / fLimitUpper),y);
-                else canvas.lineTo(i*(cw / fLimitUpper),y);
+                if (y == Infinity) y = 0;
+                if(i===0) canvas.moveTo(0,y);
+                else {
+                    let x = i*(cw / fLimitUpper);
+                    if (x >= cw) x = cw - 1;
+                    if (i == fLimitUpper - 1) {
+                        //alert(`${x}, ${y}`);
+                    }
+                    canvas.lineTo(x,y);
+                }
             }
         }
         canvas.stroke();
@@ -196,7 +205,8 @@ async function start(micOrDisplay) {
 	    canvas_history.fillStyle = 'white';
         canvas_history.fillRect(0,0,cw,ch);
 
-        canvas_history.strokeStyle = `hsl(${getColorHue(11)}, 70%, 50%)`;
+        canvas_history.lineWidth = 3;
+        canvas_history.strokeStyle = `hsl(${getColorHue(11)}, 100%, 65%)`;
         canvas_history.beginPath();
 
         let score = new Int16Array(camelotsA.length);
@@ -223,9 +233,9 @@ async function start(micOrDisplay) {
         const camelota = document.getElementById("camelota");
         const camelotb = document.getElementById("camelotb");
         camelota.innerHTML = max == -1 ? "-" : camelotsA[max];
-        camelota.style.color = `hsl(${getColorHue(max)}, 70%, 50%)`;
+        camelota.style.color = `hsl(${getColorHue(max)}, 100%, 65%)`;
         camelotb.innerHTML = max == -1 ? "-" : camelotsB[max] + " (" + noteNames[max] + ")";
-        camelotb.style.color = `hsl(${getColorHue((max - 3 + 12) % 12)}, 70%, 50%)`;
+        camelotb.style.color = `hsl(${getColorHue((max - 3 + 12) % 12)}, 100%, 65%)`;
         drawPie(score);
     }
 
